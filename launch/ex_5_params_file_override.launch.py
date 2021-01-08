@@ -10,14 +10,21 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from nav2_common.launch import RewrittenYaml
 
+import yaml
+
 def generate_launch_description():
     ros2_cpp_params_example_dir = get_package_share_directory('ros2_cpp_params_example')
 
     original_params_file = path.join(
         ros2_cpp_params_example_dir, 'params', 'params.yaml')
 
-    param_substitutions = {'my_parameter': 'Parameter overridden with RewrittenYaml!',
-                           'my_float_number': '2.71828'}
+    overrides_file = path.join(
+        ros2_cpp_params_example_dir, 'params', 'overrides.yaml')
+
+    with open(overrides_file) as file:
+        param_substitutions = yaml.load(file, Loader=yaml.FullLoader)
+
+    param_substitutions = {key: str(value) for key, value in param_substitutions.items()}
 
     configured_params = RewrittenYaml(
         source_file=original_params_file,

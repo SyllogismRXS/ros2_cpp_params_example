@@ -1,0 +1,2 @@
+my_parameter: "Overriden from YAML file"
+my_float_number: 10.98765
